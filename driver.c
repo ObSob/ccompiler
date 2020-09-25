@@ -1,15 +1,19 @@
-//
-// Created by wbh on 2020/9/24.
-//
-
-
 #include <stdio.h>
 
-// 这个mymain被8cc.c的main输出到一个文件里面，内容是一个用汇编代码写的函数mymain
-extern int mymain(void);
+// 弱符号
+#define WEAK __attribute__((weak))
+extern int intfn(void) WEAK;
+extern char *stringfn(void) WEAK;
 
 int main(int argc, char **argv) {
-    int val = mymain();
-    printf("%d\n", val);
+    if(intfn){
+        printf("%d\n", intfn());
+    }
+    else if(stringfn){
+        printf("%s", stringfn());
+    }
+    else {
+        printf("Should not happen");
+    }
     return 0;
 }

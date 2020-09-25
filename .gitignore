@@ -1,11 +1,14 @@
 # Project exclude paths
 /cmake-build-debug/
 
+8cc
 *.bin
 *.o
+*.out
 *.s
+tmp.*
 *~
-8cc
+
 stage?
 utiltest
 CMakeLists.txt

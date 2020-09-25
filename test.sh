@@ -1,4 +1,18 @@
-# /bin/bash
+#! /bin/bash
+
+# 测试是否能编译数字和字符串
+function compile {
+  echo "$1" | ./8cc > tmp.s
+  if [ "$?" -ne 0 ] ; then
+    echo "Failed to compile $1"
+    exit
+  fi
+  gcc -o tmp.out driver.c tmp.s
+  if [ $? -ne 0 ]; then
+    echo "GCC failed"
+    exit
+  fi
+}
 
 # test函数
 function test {
@@ -23,11 +37,22 @@ function test {
   fi
 }
 
+function testfail {
+  expr="$1"
+  echo "$expr" | 8cc > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    echo "Should fail to compile, but succeed: &expr"
+    exit
+  fi
+}
+
 # 执行makefile文件
 make -s 8cc
 
 test 0 0
-test 42 42
+test abc '"abc"'
 
-rm -f tmp.out tmp.s
+testfail '"abc"'
+testfail '0abc'
+
 echo "All tests passed"
